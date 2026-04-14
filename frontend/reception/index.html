@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mittel Mind Clinic – Reception Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --sky: #0EA5E9;
+      --sky-dark: #0284C7;
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-400: #94A3B8;
+      --slate-600: #475569;
+      --slate-800: #1E293B;
+      --slate-900: #0F172A;
+      --green: #10B981;
+      --red: #EF4444;
+      --amber: #F59E0B;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #EFF9FF 0%, #F5F7FF 50%, #F8FAFC 100%);
+      min-height: 100vh; color: var(--slate-800);
+    }
+    .login-wrap {
+      position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(145deg, #0C1A2E 0%, #0F2744 50%, #0A1628 100%);
+      z-index: 9999;
+    }
+    .login-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; padding: 36px 32px; width: 360px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    }
+    .login-title {
+      font-family: 'Playfair Display', serif; font-size: 22px; color: white;
+      margin-bottom: 6px;
+    }
+    .login-sub { color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 22px; }
+    .login-input {
+      width: 100%; margin-bottom: 14px; padding: 12px 14px;
+      border-radius: 10px; border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06); color: white; font-family: inherit;
+    }
+    .login-btn {
+      width: 100%; padding: 12px; border-radius: 10px; border: none;
+      background: linear-gradient(135deg, var(--sky), var(--sky-dark));
+      color: white; font-weight: 600; cursor: pointer;
+    }
+    .login-error { margin-top: 10px; color: #FCA5A5; font-size: 12px; display: none; }
+
+    .app { display: none; }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 28px; background: white; border-bottom: 1px solid var(--slate-200);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-icon {
+      width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--sky), var(--sky-dark));
+      display: flex; align-items: center; justify-content: center; color: white;
+    }
+    .brand-text h1 { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--slate-900); }
+    .brand-text p { font-size: 11px; color: var(--slate-400); letter-spacing: 1.2px; text-transform: uppercase; }
+    .logout {
+      background: rgba(239,68,68,0.1); color: #DC2626;
+      border: 1px solid rgba(239,68,68,0.2); padding: 8px 14px; border-radius: 10px;
+      cursor: pointer; font-size: 12px; font-weight: 600;
+    }
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+    .update-pill {
+      display: none; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: white; border: none; padding: 8px 14px; border-radius: 999px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      box-shadow: 0 6px 18px rgba(16,185,129,0.3);
+      animation: pulseBtn 1.8s ease-in-out infinite;
+    }
+    .update-pill.show { display: inline-flex; }
+    .update-pill .dot {
+      width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.9);
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.2);
+    }
+    @keyframes pulseBtn { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-1px)} }
+    .tabs {
+      display: flex; gap: 10px; padding: 16px 28px;
+    }
+    .tab {
+      padding: 8px 14px; border-radius: 999px; background: white;
+      border: 1px solid var(--slate-200); color: var(--slate-600); cursor: pointer; font-size: 13px;
+    }
+    .tab.active {
+      background: var(--sky); color: white; border-color: var(--sky);
+    }
+    .content { padding: 0 28px 32px; }
+    .card {
+      background: white; border: 1px solid var(--slate-200); border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+    }
+    .card-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--slate-200);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-title { font-weight: 600; color: var(--slate-800); }
+    .btn-refresh {
+      background: white; border: 1px solid var(--slate-200); padding: 6px 12px; border-radius: 8px;
+      font-size: 12px; cursor: pointer;
+    }
+    .filter-bar {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      padding: 14px 18px; border-bottom: 1px solid var(--slate-200);
+      background: var(--slate-50);
+    }
+    .filter-field { display: flex; flex-direction: column; gap: 6px; min-width: 160px; }
+    .filter-label { font-size: 11px; color: var(--slate-500); text-transform: uppercase; letter-spacing: 1px; }
+    .filter-input {
+      padding: 8px 10px; border-radius: 8px; border: 1px solid var(--slate-200);
+      font-size: 12px; font-family: inherit; outline: none;
+    }
+    .filter-actions { display: flex; align-items: flex-end; gap: 8px; margin-left: auto; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 14px; text-align: left; }
+    th { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--slate-400); background: var(--slate-50); }
+    td { font-size: 13px; color: var(--slate-700); border-bottom: 1px solid var(--slate-100); }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 600;
+    }
+    .badge-booked { background: rgba(14,165,233,0.1); color: var(--sky-dark); }
+    .badge-confirmed { background: rgba(16,185,129,0.1); color: #059669; }
+    .badge-viewed { background: rgba(16,185,129,0.12); color: #059669; }
+    .badge-not-visited { background: rgba(239,68,68,0.1); color: #DC2626; }
+    .btn-confirm {
+      background: linear-gradient(135deg, var(--green), #059669);
+      color: white; border: none; padding: 7px 12px; border-radius: 8px; font-size: 12px; cursor: pointer;
+    }
+    .empty { padding: 40px; text-align: center; color: var(--slate-400); }
+    .toast {
+      position: fixed; top: 20px; right: 20px; background: white; border-left: 4px solid var(--sky);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12); padding: 10px 14px; border-radius: 12px; font-size: 13px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-wrap" id="loginScreen">
+  <div class="login-card">
+    <div class="login-title">Reception Dashboard</div>
+    <div class="login-sub">Sign in to manage appointments</div>
+    <input class="login-input" id="loginEmail" type="text" placeholder="" autocomplete="off" spellcheck="false" autocapitalize="none" autocorrect="off">
+    <input class="login-input" id="loginPassword" type="password" placeholder="" autocomplete="new-password" spellcheck="false" autocapitalize="none" autocorrect="off">
+    <button class="login-btn" onclick="handleLogin()">Sign In</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<div class="app" id="app">
+  <header>
+    <div class="brand">
+      <div class="brand-icon">⚕️</div>
+      <div class="brand-text">
+        <h1>Mittel Mind Clinic</h1>
+        <p>Reception</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="update-pill" id="liveUpdateBtn" onclick="handleLiveUpdateClick()">
+        <span class="dot"></span>
+        <span id="liveUpdateText">New Updates</span>
+      </button>
+      <button class="logout" onclick="handleLogout()">Sign Out</button>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="booked" onclick="showTab('booked')">Booked</div>
+    <div class="tab" data-tab="confirmed" onclick="showTab('confirmed')">Confirmed</div>
+    <div class="tab" data-tab="viewed" onclick="showTab('viewed')">Completed</div>
+    <div class="tab" data-tab="notVisited" onclick="showTab('notVisited')">Not Visited</div>
+  </div>
+
+  <div class="content">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title" id="cardTitle">Booked Appointments</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn-refresh" onclick="downloadFilteredAppointments()">Download Excel</button>
+          <button class="btn-refresh" onclick="refreshTab()">Refresh</button>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <div class="filter-field">
+          <label class="filter-label" for="filterStatus">Status</label>
+          <select id="filterStatus" class="filter-input">
+            <option value="">Current Tab</option>
+            <option value="booked">Booked</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="viewed">Completed</option>
+            <option value="notVisited">Not Visited</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label class="filter-label" for="filterDate">Date</label>
+          <input type="date" id="filterDate" class="filter-input">
+        </div>
+        <div class="filter-field">
+          <label class="filter-label" for="filterYear">Year</label>
+          <input type="number" id="filterYear" class="filter-input" placeholder="2026" min="2000" max="2100">
+        </div>
+        <div class="filter-actions">
+          <button class="btn-refresh" onclick="clearFilters()">Clear</button>
+          <button class="btn-refresh" onclick="applyFilters()">Apply</button>
+        </div>
+      </div>
+      <div class="table-wrap" id="tableWrap">
+        <div class="empty">Loading...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API_BASE = (() => {
+  const origin = window.location.origin;
+  if (!origin || origin === 'null' || origin.startsWith('file:')) {
+    return 'http://localhost:5000/api';
+  }
+  try {
+    const url = new URL(origin);
+    const host = url.hostname;
+    const port = url.port;
+    if ((host === 'localhost' || host === '127.0.0.1') && port && port !== '5000') {
+      return `${url.protocol}//${host}:5000/api`;
+    }
+  } catch (e) {}
+  return `${origin}/api`;
+})();
+let authToken = localStorage.getItem('mittel_reception_token');
+let activeTab = 'booked';
+let lastChangeAt = null;
+let pendingChanges = 0;
+let changeTimer = null;
+
+function toast(msg, type = 'info') {
+  const el = document.getElementById('toast');
+  el.style.display = 'block';
+  el.style.borderLeftColor = type === 'error' ? '#EF4444' : '#0EA5E9';
+  el.textContent = msg;
+  setTimeout(() => { el.style.display = 'none'; }, 2600);
+}
+
+async function handleLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+  const errEl = document.getElementById('loginError');
+  errEl.style.display = 'none';
+
+  if (!email || !password) {
+    errEl.textContent = 'Please enter your username and password.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/reception-login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      authToken = data.token;
+      localStorage.setItem('mittel_reception_token', authToken);
+      initApp();
+    } else {
+      errEl.textContent = data.message || 'Login failed.';
+      errEl.style.display = 'block';
+    }
+  } catch (err) {
+    errEl.textContent = 'Could not connect to server.';
+    errEl.style.display = 'block';
+  }
+}
+
+function handleLogout() {
+  localStorage.removeItem('mittel_reception_token');
+  authToken = null;
+  pendingChanges = 0;
+  lastChangeAt = null;
+  if (changeTimer) clearInterval(changeTimer);
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+}
+
+async function initApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  await loadBooked();
+  lastChangeAt = new Date().toISOString();
+  startChangeWatcher();
+}
+
+function showTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
+  refreshTab();
+}
+
+function refreshTab() {
+  clearLiveUpdates();
+  if (activeTab === 'booked') return loadBooked();
+  if (activeTab === 'confirmed') return loadConfirmed();
+  if (activeTab === 'viewed') return loadViewed();
+  if (activeTab === 'notVisited') return loadNotVisited();
+}
+
+function setLiveUpdateBtn(count) {
+  const btn = document.getElementById('liveUpdateBtn');
+  const text = document.getElementById('liveUpdateText');
+  if (!btn || !text) return;
+  if (count > 0) {
+    text.textContent = `New Updates (${count})`;
+    btn.classList.add('show');
+  } else {
+    btn.classList.remove('show');
+  }
+}
+
+function clearLiveUpdates() {
+  pendingChanges = 0;
+  setLiveUpdateBtn(0);
+  lastChangeAt = new Date().toISOString();
+}
+
+function handleLiveUpdateClick() {
+  clearLiveUpdates();
+  refreshTab();
+}
+
+function startChangeWatcher() {
+  if (changeTimer) clearInterval(changeTimer);
+  changeTimer = setInterval(checkForChanges, 15000);
+}
+
+async function checkForChanges() {
+  if (!authToken) return;
+  const qs = lastChangeAt ? `?since=${encodeURIComponent(lastChangeAt)}` : '';
+  const data = await apiFetch(`/appointments/changes${qs}`);
+  if (!data || !data.success) return;
+  if (data.latestAt) lastChangeAt = data.latestAt;
+  if (data.count > 0) {
+    pendingChanges += data.count;
+    setLiveUpdateBtn(pendingChanges);
+  }
+}
+
+function getFilterValues() {
+  const status = document.getElementById('filterStatus')?.value || '';
+  const date = document.getElementById('filterDate')?.value || '';
+  const year = document.getElementById('filterYear')?.value || '';
+  return { status, date, year };
+}
+
+function buildQuery(params) {
+  const qs = new URLSearchParams();
+  if (params.all) qs.append('all', 'true');
+  if (params.date) qs.append('date', params.date);
+  if (params.year) qs.append('year', params.year);
+  return qs.toString() ? `?${qs.toString()}` : '';
+}
+
+function applyFilters() {
+  const { status } = getFilterValues();
+  if (status) {
+    if (status === 'notVisited') showTab('notVisited');
+    else showTab(status);
+  } else {
+    refreshTab();
+  }
+}
+
+function clearFilters() {
+  const statusEl = document.getElementById('filterStatus');
+  const dateEl = document.getElementById('filterDate');
+  const yearEl = document.getElementById('filterYear');
+  if (statusEl) statusEl.value = '';
+  if (dateEl) dateEl.value = '';
+  if (yearEl) yearEl.value = '';
+  refreshTab();
+}
+
+function getExportStatus() {
+  const { status } = getFilterValues();
+  const s = status || activeTab;
+  if (s === 'notVisited') return 'not_visited';
+  return s;
+}
+
+async function downloadFilteredAppointments() {
+  if (!authToken) {
+    toast('Please login first', 'error');
+    return;
+  }
+  const { date, year } = getFilterValues();
+  const qs = new URLSearchParams();
+  const status = getExportStatus();
+  if (status) qs.append('status', status);
+  if (date) qs.append('date', date);
+  if (year) qs.append('year', year);
+  const url = `${API_BASE}/appointments/export${qs.toString() ? `?${qs.toString()}` : ''}`;
+  try {
+    const res = await fetch(url, {
+      headers: { 'Authorization': `Bearer ${authToken}` }
+    });
+    if (!res.ok) {
+      toast('Export failed', 'error');
+      return;
+    }
+    const blob = await res.blob();
+    const cd = res.headers.get('content-disposition') || '';
+    const match = cd.match(/filename="([^"]+)"/);
+    const filename = match ? match[1] : 'appointments-export.csv';
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(link.href);
+    toast('Download started');
+  } catch (e) {
+    toast('Export failed', 'error');
+  }
+}
+
+async function apiFetch(endpoint, options = {}) {
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${authToken}`,
+    ...options.headers
+  };
+  const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
+  if (res.status === 401) {
+    toast('Session expired', 'error');
+    handleLogout();
+    return null;
+  }
+  return await res.json();
+}
+
+async function loadBooked() {
+  document.getElementById('cardTitle').textContent = 'Booked Appointments';
+  const wrap = document.getElementById('tableWrap');
+  wrap.innerHTML = '<div class="empty">Loading...</div>';
+  const { date, year } = getFilterValues();
+  const qs = buildQuery({ all: true, date, year });
+  const data = await apiFetch(`/appointments${qs}`);
+  if (data && data.success) {
+    wrap.innerHTML = renderBooked(data.appointments);
+  } else {
+    wrap.innerHTML = '<div class="empty">Server offline</div>';
+  }
+}
+
+function getTodayISODate() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+async function loadConfirmed() {
+  document.getElementById('cardTitle').textContent = 'Confirmed Appointments';
+  const wrap = document.getElementById('tableWrap');
+  wrap.innerHTML = '<div class="empty">Loading...</div>';
+  const { date, year } = getFilterValues();
+  const qs = buildQuery({ all: true, date, year });
+  const data = await apiFetch(`/appointments/confirmed${qs}`);
+  if (data && data.success) {
+    wrap.innerHTML = renderSimple(data.appointments, 'confirmed');
+  } else {
+    wrap.innerHTML = '<div class="empty">Server offline</div>';
+  }
+}
+
+async function loadViewed() {
+  document.getElementById('cardTitle').textContent = 'Completed Appointments';
+  const wrap = document.getElementById('tableWrap');
+  wrap.innerHTML = '<div class="empty">Loading...</div>';
+  const { date, year } = getFilterValues();
+  const qs = buildQuery({ date, year });
+  const data = await apiFetch(`/appointments/viewed${qs}`);
+  if (data && data.success) {
+    wrap.innerHTML = renderSimple(data.appointments, 'viewed');
+  } else {
+    wrap.innerHTML = '<div class="empty">Server offline</div>';
+  }
+}
+
+async function loadNotVisited() {
+  document.getElementById('cardTitle').textContent = 'Not Visited Appointments';
+  const wrap = document.getElementById('tableWrap');
+  wrap.innerHTML = '<div class="empty">Loading...</div>';
+  const { date, year } = getFilterValues();
+  const qs = buildQuery({ date, year });
+  const data = await apiFetch(`/appointments/not-visited${qs}`);
+  if (data && data.success) {
+    wrap.innerHTML = renderSimple(data.appointments, 'not_visited');
+  } else {
+    wrap.innerHTML = '<div class="empty">Server offline</div>';
+  }
+}
+
+function badge(status) {
+  if (status === 'booked') return '<span class="badge badge-booked">Booked</span>';
+  if (status === 'confirmed') return '<span class="badge badge-confirmed">Confirmed</span>';
+  if (status === 'viewed') return '<span class="badge badge-viewed">Completed</span>';
+  return '<span class="badge badge-not-visited">Not Visited</span>';
+}
+
+function renderBooked(appts) {
+  if (!appts || !appts.length) return '<div class="empty">No booked appointments</div>';
+  return `
+    <table>
+      <thead><tr>
+        <th>Patient</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Phone</th>
+        <th>Concern</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr></thead>
+      <tbody>
+        ${appts.map(a => `
+          <tr>
+            <td>${a.name}</td>
+            <td>${a.date}</td>
+            <td>${a.time}</td>
+            <td>${a.phone}</td>
+            <td>${a.concern || 'General'}</td>
+            <td>${badge(a.status)}</td>
+            <td><button class="btn-confirm" onclick="confirmBooking('${a._id}','${a.name}','${a.phone}','${a.email || ''}','${a.concern || 'General'}','${a.date}','${a.time}')">Confirm & Send WhatsApp</button></td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+function renderSimple(appts, status) {
+  if (!appts || !appts.length) return '<div class="empty">No records</div>';
+  return `
+    <table>
+      <thead><tr>
+        <th>Patient</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Phone</th>
+        <th>Concern</th>
+        <th>Status</th>
+      </tr></thead>
+      <tbody>
+        ${appts.map(a => `
+          <tr>
+            <td>${a.name}</td>
+            <td>${a.date}</td>
+            <td>${a.time}</td>
+            <td>${a.phone}</td>
+            <td>${a.concern || 'General'}</td>
+            <td>${badge(status)}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+function buildWhatsAppMessage(data) {
+  return [
+    'Appointment Confirmed!',
+    '',
+    'Your appointment has been booked successfully at Mittel Mind Clinic.',
+    '',
+    `📧 A confirmation email has been sent to ${data.email || 'your email address'}.`,
+    '',
+    'We look forward to seeing you! Please arrive 10 minutes early.',
+    '',
+    'Appointment Details',
+    `👤 Name: ${data.name}`,
+    `📞 Phone: ${data.phone}`,
+    `📧 Email: ${data.email || ''}`,
+    `🩺 Concern: ${data.concern || 'General consultation'}`,
+    `📅 Date: ${data.date}`,
+    `🕐 Time: ${data.time}`
+  ].join('\n');
+}
+
+function normalizePhone(phone) {
+  const digits = (phone || '').replace(/\D/g, '');
+  if (!digits) return '';
+  if (digits.length === 10) return `91${digits}`;
+  return digits;
+}
+
+function openWhatsApp(phone, message) {
+  const to = normalizePhone(phone);
+  if (!to) {
+    toast('Invalid WhatsApp number', 'error');
+    return;
+  }
+  const text = encodeURIComponent(message);
+  const url = `https://wa.me/${to}?text=${text}`;
+  window.open(url, '_blank', 'noopener');
+}
+
+async function confirmBooking(id, name, phone, email, concern, date, time) {
+  // Use client's phone number as recipient, clinic WhatsApp (8754509747) should be logged in
+  const clientPhone = phone || '';
+  if (!clientPhone) {
+    toast('Client phone number not available', 'error');
+    return;
+  }
+
+  const data = await apiFetch(`/appointments/${id}/confirm`, {
+    method: 'PUT',
+    body: JSON.stringify({ whatsappPhone: clientPhone })
+  });
+  if (data && data.success) {
+    toast(`Confirmed for ${name}. Opening WhatsApp to send message...`);
+    const msg = buildWhatsAppMessage({ name, phone: clientPhone, email, concern, date, time });
+    openWhatsApp(clientPhone, msg);
+    loadBooked();
+  } else {
+    toast('Confirmation failed', 'error');
+  }
+}
+
+window.addEventListener('load', () => {
+  if (!authToken) return;
+  fetch(`${API_BASE}/auth/reception-verify`, {
+    headers: { 'Authorization': `Bearer ${authToken}` }
+  }).then(r => r.json()).then(data => {
+    if (data.success) initApp();
+    else localStorage.removeItem('mittel_reception_token');
+  }).catch(() => {});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mittel Mind Clinic – Advanced Neuropsychiatry & Mental Wellness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sky: #0EA5E9;
+      --sky-dark: #0284C7;
+      --sky-light: #BAE6FD;
+      --gold: #C9A84C;
+      --gold-light: #F5E6C0;
+      --white: #FFFFFF;
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-400: #94A3B8;
+      --slate-600: #475569;
+      --slate-800: #1E293B;
+      --slate-900: #0F172A;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--slate-800);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(14,165,233,0.12);
+      padding: 0 5%;
+      height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: all 0.3s ease;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px; text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--sky), var(--sky-dark));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: white;
+      box-shadow: 0 4px 12px rgba(14,165,233,0.3);
+    }
+    .nav-logo-text {
+      display: flex; flex-direction: column;
+    }
+    .nav-logo-text .name {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px; font-weight: 700;
+      color: var(--slate-900);
+      line-height: 1.1;
+    }
+    .nav-logo-text .tagline {
+      font-size: 10px; color: var(--slate-400);
+      letter-spacing: 1.5px; text-transform: uppercase;
+    }
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--slate-600);
+      font-size: 14px; font-weight: 500;
+      transition: color 0.2s; letter-spacing: 0.3px;
+    }
+    .nav-links a:hover { color: var(--sky); }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--sky), var(--sky-dark));
+      color: white !important;
+      padding: 10px 22px; border-radius: 50px;
+      box-shadow: 0 4px 14px rgba(14,165,233,0.35);
+      transition: transform 0.2s, box-shadow 0.2s !important;
+    }
+    .nav-cta:hover {
+      transform: translateY(-1px) !important;
+      box-shadow: 0 6px 20px rgba(14,165,233,0.45) !important;
+      color: white !important;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(160deg, var(--slate-50) 0%, #EFF9FF 50%, #F0FAFB 100%);
+      display: flex; align-items: center;
+      padding: 100px 5% 60px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -100px; right: -100px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(14,165,233,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -50px; left: -50px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-content { max-width: 600px; position: relative; z-index: 2; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(14,165,233,0.08);
+      border: 1px solid rgba(14,165,233,0.2);
+      color: var(--sky-dark); border-radius: 50px;
+      padding: 6px 16px; font-size: 12px; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero-badge span { width: 6px; height: 6px; background: var(--sky); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+    
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(38px, 5vw, 58px);
+      font-weight: 700; line-height: 1.15;
+      color: var(--slate-900);
+      margin-bottom: 20px;
+    }
+    .hero h1 em { color: var(--sky); font-style: italic; }
+    .hero p {
+      font-size: 17px; color: var(--slate-600);
+      line-height: 1.75; margin-bottom: 36px; max-width: 520px;
+    }
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--sky), var(--sky-dark));
+      color: white; padding: 14px 28px; border-radius: 50px;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      border: none; text-decoration: none;
+      box-shadow: 0 6px 20px rgba(14,165,233,0.35);
+      transition: all 0.25s; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(14,165,233,0.45); }
+    .btn-secondary {
+      background: white; color: var(--slate-700);
+      padding: 14px 28px; border-radius: 50px;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      border: 1.5px solid var(--slate-200); text-decoration: none;
+      transition: all 0.25s; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-secondary:hover { border-color: var(--sky); color: var(--sky); transform: translateY(-2px); }
+
+    .hero-stats {
+      display: flex; gap: 40px; margin-top: 52px;
+      padding-top: 36px; border-top: 1px solid var(--slate-200);
+    }
+    .stat { display: flex; flex-direction: column; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px; font-weight: 700; color: var(--slate-900);
+    }
+    .stat-num span { color: var(--sky); }
+    .stat-label { font-size: 12px; color: var(--slate-400); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* HERO VISUAL */
+    .hero-visual {
+      position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+      width: 420px; display: flex; flex-direction: column; gap: 16px;
+    }
+    .hero-card {
+      background: white; border-radius: 16px;
+      padding: 20px 24px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      border: 1px solid rgba(14,165,233,0.1);
+      transition: transform 0.3s;
+    }
+    .hero-card:hover { transform: translateY(-4px); }
+    .hero-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .hero-card-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .hero-card-title { font-size: 14px; font-weight: 600; color: var(--slate-800); }
+    .hero-card-sub { font-size: 12px; color: var(--slate-400); }
+
+    /* SECTIONS */
+    section { padding: 80px 5%; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--sky-dark); font-size: 12px; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .section-label::before { content: ''; width: 20px; height: 2px; background: var(--sky); }
+    h2.section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 40px); font-weight: 700;
+      color: var(--slate-900); margin-bottom: 16px; line-height: 1.2;
+    }
+    .section-desc { font-size: 16px; color: var(--slate-600); max-width: 600px; line-height: 1.75; }
+
+    /* SERVICES */
+    .services { background: var(--slate-50); }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px; margin-top: 48px;
+    }
+    .service-card {
+      background: white; border-radius: 20px;
+      padding: 32px 28px;
+      border: 1px solid var(--slate-200);
+      transition: all 0.3s; cursor: default;
+      position: relative; overflow: hidden;
+    }
+    .service-card::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: linear-gradient(90deg, var(--sky), var(--sky-dark));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .service-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.08); }
+    .service-card:hover::after { transform: scaleX(1); }
+    .service-icon {
+      width: 56px; height: 56px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(14,165,233,0.05));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; margin-bottom: 20px;
+    }
+    .service-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; color: var(--slate-900); margin-bottom: 10px;
+    }
+    .service-card p { font-size: 14px; color: var(--slate-600); line-height: 1.7; }
+
+    /* ABOUT */
+    .about { background: white; }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      align-items: center; margin-top: 48px;
+    }
+    .about-img-wrap {
+      background: linear-gradient(135deg, rgba(14,165,233,0.08), rgba(201,168,76,0.05));
+      border-radius: 24px; padding: 48px;
+      display: flex; flex-direction: column; gap: 20px;
+      border: 1px solid rgba(14,165,233,0.12);
+    }
+    .doctor-profile {
+      display: flex; align-items: center; gap: 16px;
+      background: white; border-radius: 16px; padding: 20px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+    .doctor-avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--sky), var(--sky-dark));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; color: white; flex-shrink: 0;
+    }
+    .doctor-info h4 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--slate-900); }
+    .doctor-info p { font-size: 13px; color: var(--slate-600); }
+    .qualifications {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .qual-item {
+      display: flex; align-items: center; gap: 12px;
+      background: white; border-radius: 12px; padding: 12px 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .qual-dot { width: 8px; height: 8px; background: var(--sky); border-radius: 50%; flex-shrink: 0; }
+    .qual-item span { font-size: 13px; color: var(--slate-700); font-weight: 500; }
+    .about-content ul { list-style: none; margin: 24px 0; display: flex; flex-direction: column; gap: 12px; }
+    .about-content li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 15px; color: var(--slate-600);
+    }
+    .about-content li::before { content: '✓'; color: var(--sky); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+    /* CHATBOT */
+    .chatbot-wrap {
+      position: fixed; bottom: 28px; right: 28px; z-index: 999;
+    }
+    .chat-toggle {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--sky), var(--sky-dark));
+      border: none; cursor: pointer;
+      box-shadow: 0 6px 24px rgba(14,165,233,0.45);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; color: white;
+      transition: all 0.3s;
+    }
+    .chat-toggle:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(14,165,233,0.55); }
+    .chat-window {
+      position: absolute; bottom: 76px; right: 0;
+      width: 360px; background: white;
+      border-radius: 20px; overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.15);
+      border: 1px solid var(--slate-200);
+      display: none; flex-direction: column;
+      animation: slideUp 0.3s ease;
+    }
+    .chat-window.open { display: flex; }
+    @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .chat-header {
+      background: linear-gradient(135deg, var(--sky), var(--sky-dark));
+      padding: 18px 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .chat-header-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .chat-header-info h4 { color: white; font-size: 15px; font-weight: 600; }
+    .chat-header-info p { color: rgba(255,255,255,0.8); font-size: 12px; }
+    .online-dot {
+      width: 8px; height: 8px; background: #4ade80; border-radius: 50%;
+      display: inline-block; margin-right: 4px;
+    }
+    .chat-messages {
+      flex: 1; padding: 16px;
+      overflow-y: auto; max-height: 340px;
+      display: flex; flex-direction: column; gap: 12px;
+      scroll-behavior: smooth;
+    }
+    .msg {
+      display: flex; gap: 10px; align-items: flex-end;
+    }
+    .msg.bot { justify-content: flex-start; }
+    .msg.user { justify-content: flex-end; }
+    .msg-bubble {
+      max-width: 80%; padding: 10px 14px;
+      border-radius: 18px; font-size: 13.5px; line-height: 1.5;
+    }
+    .msg.bot .msg-bubble {
+      background: var(--slate-100); color: var(--slate-800);
+      border-bottom-left-radius: 4px;
+    }
+    .msg.user .msg-bubble {
+      background: linear-gradient(135deg, var(--sky), var(--sky-dark));
+      color: white; border-bottom-right-radius: 4px;
+    }
+    .chat-options {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      padding: 4px 0 8px;
+    }
+    .chat-opt {
+      background: rgba(14,165,233,0.08); color: var(--sky-dark);
+      border: 1px solid rgba(14,165,233,0.2); border-radius: 50px;
+      padding: 6px 14px; font-size: 12.5px; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .chat-opt:hover { background: var(--sky); color: white; border-color: var(--sky); }
+    .chat-input-area {
+      padding: 12px 14px;
+      border-top: 1px solid var(--slate-200);
+      display: flex; gap: 8px; align-items: center;
+    }
+    .chat-input {
+      flex: 1; border: 1.5px solid var(--slate-200);
+      border-radius: 50px; padding: 9px 16px;
+      font-size: 13px; outline: none; font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .chat-input:focus { border-color: var(--sky); }
+    .chat-send {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--sky), var(--sky-dark));
+      border: none; cursor: pointer; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0; transition: transform 0.2s;
+    }
+    .chat-send:hover { transform: scale(1.1); }
+
+    /* FOOTER */
+    footer {
+      background: var(--slate-900); color: white;
+      padding: 48px 5% 28px;
+    }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; margin-bottom: 40px; }
+    .footer-brand .name {
+      font-family: 'Playfair Display', serif; font-size: 22px;
+      color: white; margin-bottom: 12px;
+    }
+    .footer-brand p { color: var(--slate-400); font-size: 14px; line-height: 1.7; }
+    .footer-col h5 { color: var(--sky-light); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .footer-col ul li a { color: var(--slate-400); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+    .footer-col ul li a:hover { color: var(--sky-light); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-bottom p { color: var(--slate-400); font-size: 13px; }
+    .admin-link { color: var(--slate-600); text-decoration: none; font-size: 12px; transition: color 0.2s; }
+    .admin-link:hover { color: var(--slate-400); }
+
+    /* CONTACT SECTION */
+    .contact { background: var(--slate-50); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; margin-top: 48px; }
+    .contact-info { display: flex; flex-direction: column; gap: 24px; }
+    .contact-item { display: flex; gap: 16px; align-items: flex-start; }
+    .contact-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(14,165,233,0.05));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .contact-item h4 { font-size: 15px; font-weight: 600; color: var(--slate-900); margin-bottom: 4px; }
+    .contact-item p { font-size: 14px; color: var(--slate-600); }
+    .hours-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .hour-item { font-size: 13px; color: var(--slate-600); }
+    .hour-item strong { color: var(--slate-800); }
+
+    @media (max-width: 900px) {
+      .hero-visual { display: none; }
+      .about-grid, .contact-grid, .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+      .hero-stats { gap: 24px; }
+      nav .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">⚕️</div>
+    <div class="nav-logo-text">
+      <span class="name">MITTEL MIND CLINIC</span>
+      <span class="tagline">Neuropsychiatry & Wellness</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#" class="nav-cta" id="bookNavBtn">Book Appointment</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-content">
+    <div class="hero-badge"><span></span> </div>
+    <h1>Your Path to <em>Mental Clarity</em> Begins Here</h1>
+    <p>Expert neuropsychiatric care delivered with compassion, precision, and evidence-based medicine. Transforming lives through advanced mental health treatment.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-primary" id="bookHeroBtn">📅 Book Appointment</a>
+      <a href="#services" class="btn-secondary">🔍 Our Services</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">12<span>+</span></span><span class="stat-label">Years Experience</span></div>
+      <div class="stat"><span class="stat-num">5K<span>+</span></span><span class="stat-label">Patients Helped</span></div>
+      <div class="stat"><span class="stat-num">98<span>%</span></span><span class="stat-label">Satisfaction Rate</span></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="hero-card-header">
+        <div class="hero-card-icon" style="background:rgba(14,165,233,0.1)">🧠</div>
+        <div><div class="hero-card-title">Advanced Neuropsychiatry</div><div class="hero-card-sub">Comprehensive brain health evaluation</div></div>
+      </div>
+      <div style="background:var(--slate-100);border-radius:8px;height:6px;overflow:hidden"><div style="background:linear-gradient(90deg,var(--sky),var(--sky-dark));height:100%;width:85%;border-radius:8px"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px"><span style="font-size:11px;color:var(--slate-400)">Treatment Progress</span><span style="font-size:11px;color:var(--sky);font-weight:600">85%</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="hero-card">
+        <div style="font-size:24px;margin-bottom:8px">😌</div>
+        <div style="font-size:22px;font-weight:700;color:var(--slate-900);font-family:'Playfair Display',serif">98%</div>
+        <div style="font-size:12px;color:var(--slate-400)">Patient Satisfaction</div>
+      </div>
+      <div class="hero-card">
+        <div style="font-size:24px;margin-bottom:8px">⚡</div>
+        <div style="font-size:22px;font-weight:700;color:var(--slate-900);font-family:'Playfair Display',serif">24h</div>
+        <div style="font-size:12px;color:var(--slate-400)">Quick Appointments</div>
+      </div>
+    </div>
+    <div class="hero-card" style="background:linear-gradient(135deg,var(--slate-900),#1E293B)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--sky),var(--sky-dark));display:flex;align-items:center;justify-content:center;font-size:16px">🩺</div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:white">Next Available Slot</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.5)">Book instantly via chatbot</div>
+        </div>
+      </div>
+      <div style="background:rgba(14,165,233,0.15);border-radius:8px;padding:10px 14px;border:1px solid rgba(14,165,233,0.2)">
+        <span style="color:var(--sky-light);font-size:13px;font-weight:500">🗓 Slots available — Click 💬 to book</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-label">What We Treat</div>
+  <h2 class="section-title">Comprehensive Neuropsychiatric Services</h2>
+  <p class="section-desc">We offer evidence-based treatment across a wide spectrum of neurological and psychiatric conditions with personalized care plans.</p>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🧠</div>
+      <h3>Neuropsychiatric Evaluation</h3>
+      <p>Comprehensive assessment of cognitive function, behavior, and neurological health using advanced diagnostic protocols.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">😟</div>
+      <h3>Depression & Anxiety</h3>
+      <p>Evidence-based treatment for mood disorders, panic attacks, and anxiety using modern pharmacological and therapeutic approaches.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">💤</div>
+      <h3>Sleep Disorders</h3>
+      <p>Diagnosis and treatment of insomnia, sleep apnea, narcolepsy, and other sleep-related neurological conditions.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⚡</div>
+      <h3>Epilepsy Management</h3>
+      <p>Advanced seizure management with personalized medication protocols and lifestyle guidance for optimal quality of life.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🎯</div>
+      <h3>ADHD & Cognitive Issues</h3>
+      <p>Specialized assessment and treatment for attention disorders, memory problems, and executive function impairments.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🤝</div>
+      <h3>Psychotherapy & Counseling</h3>
+      <p>Individual and family therapy sessions using CBT, mindfulness, and trauma-informed therapeutic approaches.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="section-label">About Our Clinic</div>
+  <h2 class="section-title">Where Science Meets<br>Compassionate Care</h2>
+  <div class="about-grid">
+    <div class="about-img-wrap">
+      <div class="doctor-profile">
+        <div class="doctor-avatar">👨‍⚕️</div>
+        <div class="doctor-info">
+          <h4>Dr.E.Lloyds</h4>
+          <p>MBBS.,MD(psych) · Senior Neuropsychiatrist</p>
+          <p style="font-size:12px;color:var(--sky);margin-top:4px">12+ Years Clinical Experience</p>
+        </div>
+      </div>
+      <div class="qualifications">
+        <div class="qual-item"><div class="qual-dot"></div><span>MBBS – Madras Medical College</span></div>
+        <div class="qual-item"><div class="qual-dot"></div><span>MD (Psychiatry) – Government Medical College</span></div>
+        <div class="qual-item"><div class="qual-dot"></div><span>DPM – Diploma in Psychological Medicine</span></div>
+        <div class="qual-item"><div class="qual-dot"></div><span>Fellowship – Child & Adolescent Psychiatry</span></div>
+        <div class="qual-item"><div class="qual-dot"></div><span>Member – Indian Psychiatric Society</span></div>
+      </div>
+    </div>
+    <div class="about-content">
+      <p style="font-size:16px;color:var(--slate-600);line-height:1.8">At Mittel Mind Clinic, we believe mental health treatment should be as sophisticated and personalized as any other branch of medicine. Our approach combines cutting-edge neuroscience with deep human empathy.</p>
+      <ul>
+        <li>Evidence-based treatment protocols updated with latest research</li>
+        <li>Completely confidential and judgment-free environment</li>
+        <li>Integrated approach — pharmacological & psychotherapeutic</li>
+        <li>Dedicated follow-up care and monitoring</li>
+        <li>Family involvement and psychoeducation support</li>
+        <li>Holistic wellness planning beyond symptom management</li>
+      </ul>
+      <a href="#" class="btn-primary" id="bookAboutBtn" style="margin-top:16px">📅 Schedule Consultation</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-label">Find Us</div>
+  <h2 class="section-title">Visit Our Clinic</h2>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <h4>Clinic Address</h4>
+          <p>Mittel Mind Clinic<br>188-A ,East veli street,Madurai 625001,<br>Tamil Nadu, India</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div>
+          <h4>Phone</h4>
+          <p>+91 8110835188</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📧</div>
+        <div>
+          <h4>Email</h4>
+          <p>mittelmindclinic@gmail.com</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🕐</div>
+        <div>
+          <h4>Clinic Hours</h4>
+          <div class="hours-grid">
+            <div class="hour-item"><strong>Monday–Sunday:</strong> 6:00 PM – 9:00 PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="background:linear-gradient(135deg,rgba(14,165,233,0.06),rgba(201,168,76,0.04));border-radius:24px;padding:40px;border:1px solid rgba(14,165,233,0.12);display:flex;flex-direction:column;gap:20px;align-items:center;justify-content:center;text-align:center">
+      <div style="font-size:60px">🗓</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:24px;color:var(--slate-900)">Book Your Appointment</h3>
+      <p style="color:var(--slate-600);font-size:15px">Use our smart AI assistant to schedule your consultation in under 2 minutes.</p>
+      <button class="btn-primary" id="bookContactBtn" style="font-size:16px;padding:16px 32px">💬 Open Chat to Book</button>
+      <p style="font-size:12px;color:var(--slate-400)">Available Monday–Sunday · Instant confirmation</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="name">⚕️ MITTEL MIND CLINIC</div>
+      <p>Advanced Neuropsychiatry & Mental Wellness Center<br>Committed to excellence in brain health care since 2012.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Services</h5>
+      <ul>
+        <li><a href="#">Neuropsychiatric Evaluation</a></li>
+        <li><a href="#">Depression & Anxiety</a></li>
+        <li><a href="#">Sleep Disorders</a></li>
+        <li><a href="#">Epilepsy Management</a></li>
+        <li><a href="#">ADHD Treatment</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="#">188 -A, East veli street, Madurai-625001</a></li>
+        <li><a href="#">+91 8110835188</a></li>
+        <li><a href="#">mittelmindclinic@gmail.com</a></li>
+        <li><a href="#">Monday–Sunday: 6:00 PM – 9:00 PM</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 Mittel Mind Clinic. All rights reserved.</p>
+    <a href="/admin" class="admin-link">🔒 Admin Portal</a>
+  </div>
+</footer>
+
+<!-- CHATBOT -->
+<div class="chatbot-wrap">
+  <div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+      <div class="chat-header-avatar">🤖</div>
+      <div class="chat-header-info">
+        <h4>MindBot Assistant</h4>
+        <p><span class="online-dot"></span>Online · Appointment Booking</p>
+      </div>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-area">
+      <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." autocomplete="off">
+      <button class="chat-send" id="chatSend">➤</button>
+    </div>
+  </div>
+  <button class="chat-toggle" id="chatToggle">💬</button>
+</div>
+
+<script>
+  // ─── API Configuration ───
+  const API_BASE = window.location.origin + '/api';
+
+  // ─── Chatbot State ───
+  const chatState = {
+    step: 'welcome',
+    data: { name: '', phone: '', email: '', date: '', time: '', concern: '' }
+  };
+
+  const steps = {
+    welcome: {
+      msg: "👋 Hello! I'm MindBot, your appointment assistant at **Mittel Mind Clinic**.\n\nHow can I help you today?",
+      opts: ['📅 Book Appointment', '🕐 Check Timings', '📞 Contact Info', '🏥 About the Clinic']
+    },
+    name: { msg: "Great! Let's book your appointment. 😊\n\nMay I have your **full name**, please?" },
+    phone: { msg: "Thank you! Could you share your **WhatsApp number** so we can reach you?" },
+    email: { msg: "And your **email address** for the confirmation?" },
+    date: { msg: "Please enter your preferred **appointment date** (e.g., 15-2-2026 or 15/2/2026 or 15.2.2026):" },
+    confirm: { msg: '' }
+  };
+
+  function parseDateInput(input) {
+    // Support formats: DD-MM-YYYY, DD/MM/YYYY, DD.MM.YYYY
+    const dateRegex = /^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})$/;
+    const match = input.trim().match(dateRegex);
+
+    if (!match) return null;
+
+    const day = parseInt(match[1]);
+    const month = parseInt(match[2]) - 1; // JavaScript months are 0-based
+    const year = parseInt(match[3]);
+
+    // Validate date
+    const date = new Date(year, month, day);
+    if (date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day) {
+      return null; // Invalid date
+    }
+
+    // Check if date is not in the past
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (date < today) {
+      return null; // Past date
+    }
+
+    return {
+      iso: date.toISOString().split('T')[0],
+      display: date.toLocaleDateString('en-IN', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    };
+  }
+
+  const formatBold = (text) => text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+
+  function addMessage(text, type = 'bot', opts = []) {
+    const msgs = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = `msg ${type}`;
+    div.innerHTML = `<div class="msg-bubble">${formatBold(text)}</div>`;
+    msgs.appendChild(div);
+
+    if (opts.length) {
+      const optDiv = document.createElement('div');
+      optDiv.className = 'chat-options';
+      opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'chat-opt';
+        btn.textContent = opt;
+        btn.onclick = () => handleOption(opt);
+        optDiv.appendChild(btn);
+      });
+      msgs.appendChild(optDiv);
+    }
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function buildWhatsAppMessage(data) {
+    // Format the date nicely for WhatsApp
+    const dateObj = new Date(data.date);
+    const formattedDate = dateObj.toLocaleDateString('en-IN', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    return [
+      'Appointment Confirmed!',
+      '',
+      'Your appointment has been booked successfully at Mittel Mind Clinic.',
+      '',
+      `📧 A confirmation email has been sent to ${data.email || 'your email address'}.`,
+      '',
+      'We look forward to seeing you! Please arrive 10 minutes early.',
+      '',
+      'Appointment Details',
+      `👤 Name: ${data.name}`,
+      `📞 Phone: ${data.phone}`,
+      `📧 Email: ${data.email}`,
+      `📅 Date: ${formattedDate}`,
+    ].join('\n');
+  }
+
+  function handleOption(opt) {
+    addMessage(opt, 'user');
+    processInput(opt);
+  }
+
+  async function processInput(input) {
+    const s = chatState;
+    input = input.trim();
+
+    switch(s.step) {
+      case 'welcome':
+        if (input.includes('Book')) {
+          s.step = 'name'; addMessage(steps.name.msg);
+        } else if (input.includes('Timing')) {
+          addMessage("🕐 **Clinic Hours:**\nMonday – Sunday: 6:00 PM – 9:00 PM\n\nEmergencies: 24/7 helpline available.");
+          setTimeout(() => addMessage("Is there anything else I can help you with?", 'bot', ['📅 Book Appointment', '📞 Contact Info']), 800);
+        } else if (input.includes('Contact')) {
+          addMessage("📞 **Contact Information:**\nPhone: +91 8110835188\nEmail: mittelmindclinic@gmail.com\nAddress: 188 -A, East veli street, Madurai-625001");
+          setTimeout(() => addMessage("Would you like to book an appointment?", 'bot', ['📅 Yes, Book Now', '🚫 No, Thanks']), 800);
+        } else if (input.includes('About')) {
+          addMessage("🏥 **Mittel Mind Clinic** is neuropsychiatry center, led by **Dr.E. Lloyds**, MBBS.,MD(psych).,with 12+ years of experience.\n\nWe specialize in comprehensive brain health and mental wellness care.");
+          setTimeout(() => addMessage("Would you like to book a consultation?", 'bot', ['📅 Book Appointment', '🔙 Go Back']), 800);
+        } else if (input.includes('Yes, Book')) {
+          s.step = 'name'; addMessage(steps.name.msg);
+        } else {
+          addMessage("I'm here to help! What would you like to do?", 'bot', steps.welcome.opts);
+        }
+        break;
+
+      case 'name':
+        if (input.length < 2) { addMessage("Please enter your full name."); return; }
+        s.data.name = input;
+        s.step = 'phone'; addMessage(steps.phone.msg);
+        break;
+
+      case 'phone':
+        if (!/[\d\s\+\-]{7,15}/.test(input)) { addMessage("⚠️ Please enter a valid phone number."); return; }
+        s.data.phone = input;
+        s.step = 'email'; addMessage(steps.email.msg);
+        break;
+
+      case 'email':
+        if (!input.includes('@')) { addMessage("⚠️ Please enter a valid email address."); return; }
+        s.data.email = input;
+        s.step = 'date'; addMessage(steps.date.msg, 'bot');
+        break;
+
+      case 'date':
+        // Parse manual date input (supports formats like 15-2-2026, 15/2/2026, 15.2.2026)
+        const parsedDate = parseDateInput(input);
+        if (!parsedDate) {
+          addMessage("⚠️ Please enter a valid date in format DD-MM-YYYY, DD/MM/YYYY, or DD.MM.YYYY");
+          return;
+        }
+        s.data.date = parsedDate.iso;
+        s.step = 'confirm';
+        addMessage(`📋 **Appointment Summary:**\n\n👤 Name: ${s.data.name}\n📞 WhatsApp: ${s.data.phone}\n📧 Email: ${s.data.email}\n📅 Date: ${parsedDate.display}\n\nShall I confirm this appointment?`, 'bot', ['✅ Confirm Booking', '✏️ Edit Details', '❌ Cancel']);
+        break;
+
+      case 'confirm':
+        if (input.includes('Confirm')) {
+          await bookAppointment();
+        } else if (input.includes('Edit')) {
+          s.step = 'name';
+          s.data = { name:'', phone:'', email:'', date:'', time:'', concern:'' };
+          addMessage("Sure! Let's start over. What's your **full name**?");
+        } else if (input.includes('Cancel')) {
+          s.step = 'welcome';
+          s.data = { name:'', phone:'', email:'', date:'', time:'', concern:'' };
+          addMessage("Booking cancelled. Is there anything else I can help you with?", 'bot', steps.welcome.opts);
+        }
+        break;
+    }
+  }
+
+  async function bookAppointment() {
+    addMessage("⏳ Booking your appointment, please wait...");
+    try {
+      const res = await fetch(`${API_BASE}/book-appointment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(chatState.data)
+      });
+      const data = await res.json();
+      if (data.success) {
+        addMessage(`✅ **Appointment Confirmed!**\n\nYour appointment has been booked successfully at Mittel Mind Clinic.\n\n📧 A confirmation email has been sent to **${chatState.data.email}**.\n\nWe look forward to seeing you! Please arrive 10 minutes early. 🙏`);
+        chatState.step = 'welcome';
+        chatState.data = { name:'', phone:'', email:'', date:'', time:'', concern:'' };
+        setTimeout(() => addMessage("Is there anything else I can help you with?", 'bot', ['🏠 Main Menu']), 1000);
+      } else {
+        addMessage(`❌ Booking failed: ${data.message}\n\nPlease try again or call us directly at +91 8110835188.`);
+        chatState.step = 'confirm';
+        setTimeout(() => addMessage("What would you like to do?", 'bot', ['✅ Try Again', '❌ Cancel']), 500);
+      }
+    } catch (err) {
+      addMessage("⚠️ Connection error. Please call us directly at +91 8110835188 to book your appointment.");
+    }
+  }
+
+  // Init chat
+  const chatWindow = document.getElementById('chatWindow');
+  const chatToggle = document.getElementById('chatToggle');
+  const chatInput = document.getElementById('chatInput');
+  const chatSend = document.getElementById('chatSend');
+  let chatOpen = false;
+
+  function openChat() {
+    chatOpen = true;
+    chatWindow.classList.add('open');
+    chatToggle.textContent = '✕';
+    if (!document.getElementById('chatMessages').children.length) {
+      addMessage(steps.welcome.msg, 'bot', steps.welcome.opts);
+    }
+  }
+
+  chatToggle.onclick = () => { chatOpen ? (chatWindow.classList.remove('open'), chatToggle.textContent='💬', chatOpen=false) : openChat(); };
+
+  chatInput.onkeydown = (e) => { if (e.key === 'Enter') sendUserMessage(); };
+  chatSend.onclick = sendUserMessage;
+
+  function sendUserMessage() {
+    const val = chatInput.value.trim();
+    if (!val) return;
+    chatInput.value = '';
+    addMessage(val, 'user');
+    processInput(val);
+  }
+
+  // Book buttons open chat
+  ['bookNavBtn','bookHeroBtn','bookAboutBtn','bookContactBtn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.onclick = (e) => { e.preventDefault(); openChat(); };
+  });
+</script>
+</body>
+</html>
